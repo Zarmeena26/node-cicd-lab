@@ -6,27 +6,24 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        node-version: [12.x, 14.x, 16.x]
+
     steps:
     - uses: actions/checkout@v4
 
-    - name: Use Node.js
+    - name: Use Node.js ${{ matrix.node-version }} # Dynamic name based on version
       uses: actions/setup-node@v4
       with:
-        node-version: '20'
+        node-version: ${{ matrix.node-version }} # Matrix version use ho rahi hai
         cache: 'npm'
 
     - name: Install deps
       run: npm ci
 
-    - name: Access API Key
-      env:
-        MY_API_KEY: ${{ secrets.API_KEY }}
-      run: |
-        echo "API Key check ki ja rahi hai..."
-        # Note: Logs mein ye sirf *** nazar aayega
-        echo "The secret is: $MY_API_KEY" 
-
     - name: Run tests
+      # Agar aapne pichle step wala secret use karna hai to yahan env add rakhein
       env:
         API_KEY: ${{ secrets.API_KEY }}
       run: npm test
