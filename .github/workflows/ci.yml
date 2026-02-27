@@ -23,7 +23,7 @@ jobs:
       run: npm ci
 
     - name: Run tests
-      # Agar aapne pichle step wala secret use karna hai to yahan env add rakhein
+
       env:
         API_KEY: ${{ secrets.API_KEY }}
       run: npm test
