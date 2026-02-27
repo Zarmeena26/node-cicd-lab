@@ -1,16 +1,32 @@
 name: Node CI
+
 on: [push, pull_request]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
     - uses: actions/checkout@v4
+
     - name: Use Node.js
       uses: actions/setup-node@v4
       with:
         node-version: '20'
         cache: 'npm'
+
     - name: Install deps
       run: npm ci
+
+    - name: Access API Key
+      env:
+        MY_API_KEY: ${{ secrets.API_KEY }}
+      run: |
+        echo "API Key check ki ja rahi hai..."
+        # Note: Logs mein ye sirf *** nazar aayega
+        echo "The secret is: $MY_API_KEY" 
+
     - name: Run tests
+      env:
+        API_KEY: ${{ secrets.API_KEY }}
       run: npm test
